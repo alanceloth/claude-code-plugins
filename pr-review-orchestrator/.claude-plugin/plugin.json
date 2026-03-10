@@ -9,7 +9,9 @@
     "parallel-agents",
     "pr-review"
   ],
-  "author": "alanceloth",
+  "author": {
+    "name": "Alan Lanceloth"
+  },
   "license": "MIT",
   "repository": "https://github.com/alanceloth/claude-code-plugins"
 }

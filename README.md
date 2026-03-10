@@ -19,7 +19,11 @@ Features:
 #### Install
 
 ```bash
-claude plugin add alanceloth/claude-code-plugins/pr-review-orchestrator
+# 1. Add the marketplace
+/plugin marketplace add alanceloth/claude-code-plugins
+
+# 2. Install the plugin
+/plugin install pr-review-orchestrator@alanceloth-plugins
 ```
 
 #### Usage

@@ -1,0 +1,23 @@
+{
+  "name": "alanceloth-plugins",
+  "owner": {
+    "name": "Alan Lanceloth",
+    "email": "alan.lanceloth@gmail.com"
+  },
+  "metadata": {
+    "description": "Claude Code plugins collection by alanceloth — PR Review Orchestrator and more"
+  },
+  "plugins": [
+    {
+      "name": "pr-review-orchestrator",
+      "source": "./pr-review-orchestrator",
+      "description": "Meta-orchestrator that dynamically discovers all installed review specialist agents, dispatches them in parallel for PR reviews, and aggregates findings into a single consolidated PR comment.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Alan Lanceloth"
+      },
+      "keywords": ["code-review", "pull-request", "orchestrator", "parallel-agents", "pr-review"],
+      "category": "code-review"
+    }
+  ]
+}
