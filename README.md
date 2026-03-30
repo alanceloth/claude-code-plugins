@@ -2,7 +2,27 @@
 
 A collection of plugins for [Claude Code](https://claude.ai/code) — Anthropic's official CLI for Claude.
 
-## Available Plugins
+## Available
+
+### Statusline
+
+**2-line status bar showing context usage, cost, session time, git info, and system stats.**
+
+```
+[Opus] my-repo | main +2 ~1 | RAM:8.2G/16G(51%) CPU:12%
+[████░░░░░░] 42%  $0.05  8m5s
+```
+
+Quick install:
+```bash
+git clone https://github.com/alanceloth/claude-code-plugins.git /tmp/cc-plugins && bash /tmp/cc-plugins/statusline/install.sh
+```
+
+See [statusline/README.md](statusline/README.md) for details.
+
+---
+
+## Plugins
 
 ### PR Review Orchestrator
 
