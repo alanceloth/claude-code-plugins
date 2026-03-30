@@ -6,11 +6,11 @@ A collection of plugins for [Claude Code](https://claude.ai/code) — Anthropic'
 
 ### Statusline
 
-**2-line status bar showing context usage, cost, session time, git info, and system stats.**
+**2-line status bar showing context usage, cost, session time, git info, system stats, and rate limit usage.**
 
 ```
 [Opus] my-repo | main +2 ~1 | RAM:8.2G/16G(51%) CPU:12%
-[████░░░░░░] 42%  $0.05  8m5s
+████░░░░░░ 42%  $0.05  8m5s  |  5h:23% 7d:41%
 ```
 
 Quick install:
