@@ -6,7 +6,7 @@ A 2-line status bar for [Claude Code](https://claude.ai/code) that shows context
 
 ```
 [Opus] my-repo | main +2 ~1 | RAM:8.2G/16G(51%) CPU:12%
-████░░░░░░ 42%  $0.05  8m5s  |  5h:23% 7d:41%
+[====------] 42%  $0.05  8m5s  |  5h:23% 7d:41%
 ```
 
 ### Line 1
@@ -25,7 +25,7 @@ A 2-line status bar for [Claude Code](https://claude.ai/code) that shows context
 
 | Segment | Description |
 |---------|-------------|
-| `████░░░░░░ 42%` | Context window usage bar (green <60%, yellow <80%, red >=80%) |
+| `[====------] 42%` | Context window usage bar (green <60%, yellow <80%, red >=80%) |
 | `$0.05` | Session cost (from API) |
 | `8m5s` | Session elapsed time |
 | `5h:23%` | 5-hour session rate limit usage (green <60%, yellow <80%, red >=80%) |

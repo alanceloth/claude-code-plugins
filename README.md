@@ -10,7 +10,7 @@ A collection of plugins for [Claude Code](https://claude.ai/code) — Anthropic'
 
 ```
 [Opus] my-repo | main +2 ~1 | RAM:8.2G/16G(51%) CPU:12%
-████░░░░░░ 42%  $0.05  8m5s  |  5h:23% 7d:41%
+[====------] 42%  $0.05  8m5s  |  5h:23% 7d:41%
 ```
 
 Quick install:
