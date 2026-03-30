@@ -35,25 +35,50 @@ A 2-line status bar for [Claude Code](https://claude.ai/code) that shows context
 
 ## Install
 
+### Prerequisites
+
+#### jq (required)
+
+| Platform | Command |
+|----------|---------|
+| macOS | `brew install jq` |
+| Ubuntu/Debian | `sudo apt install jq` |
+| Fedora | `sudo dnf install jq` |
+| Windows (Scoop) | `scoop install jq` |
+| Windows (Chocolatey) | `choco install jq` |
+
+<details>
+<summary>Don't have Scoop? Install it first (Windows)</summary>
+
+Open **PowerShell** and run:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+```
+
+Then install jq:
+
+```powershell
+scoop install jq
+```
+
+</details>
+
 ### One-liner
 
 ```bash
-git clone https://github.com/alanceloth/claude-code-plugins.git /tmp/cc-plugins && bash /tmp/cc-plugins/statusline/install.sh
+git clone https://github.com/alanceloth/claude-code-plugins.git && bash claude-code-plugins/statusline/install.sh
 ```
 
 ### Manual
 
 ```bash
-# 1. Install jq (required)
-# macOS: brew install jq
-# Ubuntu: sudo apt install jq
-# Windows: scoop install jq
-
-# 2. Copy script
+# 1. Copy script
 cp statusline-command.sh ~/.claude/statusline-command.sh
 chmod +x ~/.claude/statusline-command.sh
 
-# 3. Add to ~/.claude/settings.json
+# 2. Add to ~/.claude/settings.json
 # {
 #   "statusLine": {
 #     "type": "command",
@@ -67,6 +92,7 @@ chmod +x ~/.claude/statusline-command.sh
 - [Claude Code](https://claude.ai/code) CLI
 - [jq](https://jqlang.github.io/jq/) (JSON parser)
 - Bash (Git Bash on Windows)
+- [Scoop](https://scoop.sh/) or [Chocolatey](https://chocolatey.org/) (Windows, for installing jq)
 
 ## Platform Support
 

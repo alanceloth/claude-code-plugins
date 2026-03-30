@@ -15,11 +15,15 @@ if ! command -v jq &>/dev/null; then
     echo ""
     echo "[!] jq is required but not installed."
     echo "    Install it:"
-    echo "      Windows (scoop): scoop install jq"
-    echo "      Windows (choco): choco install jq"
     echo "      macOS:           brew install jq"
     echo "      Ubuntu/Debian:   sudo apt install jq"
     echo "      Fedora:          sudo dnf install jq"
+    echo "      Windows (scoop): scoop install jq"
+    echo "      Windows (choco): choco install jq"
+    echo ""
+    echo "    Don't have Scoop? Install it first (PowerShell):"
+    echo "      Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser"
+    echo "      Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression"
     exit 1
 fi
 

@@ -15,7 +15,7 @@ A collection of plugins for [Claude Code](https://claude.ai/code) — Anthropic'
 
 Quick install:
 ```bash
-git clone https://github.com/alanceloth/claude-code-plugins.git /tmp/cc-plugins && bash /tmp/cc-plugins/statusline/install.sh
+git clone https://github.com/alanceloth/claude-code-plugins.git && bash claude-code-plugins/statusline/install.sh
 ```
 
 See [statusline/README.md](statusline/README.md) for details.
