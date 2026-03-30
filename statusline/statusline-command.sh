@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code Status Line
-# 2-line status bar: model, repo link, git, RAM/CPU + context bar, cost, duration
+# 2-line status bar: model, repo link, git, RAM/CPU + context bar, cost, duration, rate limits
 # https://github.com/alanceloth/claude-code-plugins
 
 input=$(cat)
@@ -33,34 +33,37 @@ BAR=""
 [ "$FILLED" -gt 0 ] && printf -v FILL "%${FILLED}s" && BAR="${FILL// /█}"
 [ "$EMPTY" -gt 0 ] && printf -v PAD "%${EMPTY}s" && BAR="${BAR}${PAD// /░}"
 
+# Color: green <60%, yellow <80%, red >=80%
 if   [ "$PCT" -lt 60 ]; then BAR_COLOR=$C_GREEN
 elif [ "$PCT" -lt 80 ]; then BAR_COLOR=$C_YELLOW
 else                          BAR_COLOR=$C_RED
 fi
 ctx_segment=$(printf "${BAR_COLOR}${BAR}${R} ${BAR_COLOR}${BOLD}%s%%${R}" "$PCT")
 
-# ── Cost ──────────────────────────────────────────────────────────────────────
+# ── Cost (from API) ──────────────────────────────────────────────────────────
+COST_FMT=$(printf '$%.4f' "$COST")
+# Switch to 2 decimals when cost >= $0.01
 if [ "$(echo "$COST" | awk '{print ($1 >= 0.01)}')" = "1" ]; then
     COST_FMT=$(printf '$%.2f' "$COST")
-else
-    COST_FMT=$(printf '$%.4f' "$COST")
 fi
 cost_segment=$(printf "${C_MAGENTA}${BOLD}%s${R}" "$COST_FMT")
 
-# ── Session duration ──────────────────────────────────────────────────────────
+# ── Session duration (from API, in ms) ───────────────────────────────────────
 DURATION_SEC=$((DURATION_MS / 1000))
+MINS=$((DURATION_SEC / 60))
+SECS=$((DURATION_SEC % 60))
 if [ "$DURATION_SEC" -ge 3600 ]; then
     H=$((DURATION_SEC / 3600))
     M=$(( (DURATION_SEC % 3600) / 60 ))
     elapsed_str="${H}h${M}m"
 elif [ "$DURATION_SEC" -ge 60 ]; then
-    elapsed_str="$((DURATION_SEC / 60))m$((DURATION_SEC % 60))s"
+    elapsed_str="${MINS}m${SECS}s"
 else
     elapsed_str="${DURATION_SEC}s"
 fi
 elapsed_segment=$(printf "${C_CYAN}${BOLD}%s${R}" "$elapsed_str")
 
-# ── Git info (cached 5s for performance) ──────────────────────────────────────
+# ── Git info (cached for performance) ────────────────────────────────────────
 CACHE_FILE="/tmp/statusline-git-cache"
 CACHE_MAX_AGE=5
 
@@ -68,6 +71,9 @@ cache_is_stale() {
     [ ! -f "$CACHE_FILE" ] || \
     [ $(($(date +%s) - $(stat -c %Y "$CACHE_FILE" 2>/dev/null || stat -f %m "$CACHE_FILE" 2>/dev/null || echo 0))) -gt $CACHE_MAX_AGE ]
 }
+
+git_segment=""
+repo_segment=""
 
 if cache_is_stale; then
     if git -C "$DIR" rev-parse --git-dir > /dev/null 2>&1; then
@@ -84,7 +90,6 @@ fi
 
 IFS='|' read -r BRANCH STAGED MODIFIED REMOTE_URL REPO_NAME < "$CACHE_FILE"
 
-git_segment=""
 if [ -n "$BRANCH" ]; then
     branch_part=$(printf "${C_BLUE}${BOLD}%s${R}" "$BRANCH")
     indicators=""
@@ -99,13 +104,13 @@ if [ -n "$BRANCH" ]; then
     git_segment="${branch_part} ${indicators}"
 fi
 
-# ── Repo name + OSC 8 clickable link ──────────────────────────────────────────
-repo_segment=""
+# ── Repo name + OSC 8 clickable hyperlink ─────────────────────────────────────
 if [ -n "$REPO_NAME" ]; then
     if echo "$REMOTE_URL" | grep -q "github.com" 2>/dev/null; then
         HTTPS_URL=$(echo "$REMOTE_URL" \
             | sed 's|git@github\.com:|https://github.com/|' \
             | sed 's|\.git$||')
+        # OSC 8 hyperlink: \e]8;;URL\a TEXT \e]8;;\a
         repo_segment=$(printf "\033]8;;%s\a${C_CYAN}${BOLD}%s${R}\033]8;;\a" "$HTTPS_URL" "$REPO_NAME")
     else
         repo_segment=$(printf "${C_CYAN}${BOLD}%s${R}" "$REPO_NAME")
@@ -184,7 +189,6 @@ case "$(uname -s)" in
                 idle  = $5
                 printf "%d%%", 100 * (1 - (idle - prev_idle) / (total - prev_total))
             }' /proc/stat 2>/dev/null)
-        # Fallback: skip CPU on Linux if it's slow
         [ -z "$cpu_info" ] && cpu_info=""
         ;;
 esac
@@ -197,15 +201,39 @@ if [ -n "$cpu_info" ]; then
     sys_segment="${sys_segment}$(printf "${C_GRAY}CPU:${C_WHITE}%s${R}" "$cpu_info")"
 fi
 
-# ── Output (2 lines) ─────────────────────────────────────────────────────────
-# Line 1: [Model] repo | branch +staged ~modified | RAM/CPU
+# ── Rate limits (Claude.ai subscription) ─────────────────────────────────────
+FIVE_HOUR_PCT=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+SEVEN_DAY_PCT=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+
+rate_segment=""
+if [ -n "$FIVE_HOUR_PCT" ]; then
+    FIVE_INT=$(printf '%.0f' "$FIVE_HOUR_PCT")
+    if   [ "$FIVE_INT" -lt 60 ]; then RATE5_COLOR=$C_GREEN
+    elif [ "$FIVE_INT" -lt 80 ]; then RATE5_COLOR=$C_YELLOW
+    else                               RATE5_COLOR=$C_RED
+    fi
+    rate_segment=$(printf "${C_GRAY}5h:${RATE5_COLOR}${BOLD}%s%%${R}" "$FIVE_INT")
+fi
+if [ -n "$SEVEN_DAY_PCT" ]; then
+    SEVEN_INT=$(printf '%.0f' "$SEVEN_DAY_PCT")
+    if   [ "$SEVEN_INT" -lt 60 ]; then RATE7_COLOR=$C_GREEN
+    elif [ "$SEVEN_INT" -lt 80 ]; then RATE7_COLOR=$C_YELLOW
+    else                               RATE7_COLOR=$C_RED
+    fi
+    week_seg=$(printf "${C_GRAY}7d:${RATE7_COLOR}${BOLD}%s%%${R}" "$SEVEN_INT")
+    [ -n "$rate_segment" ] && rate_segment="${rate_segment} ${week_seg}" || rate_segment="$week_seg"
+fi
+
+# ── Output: 2 lines ──────────────────────────────────────────────────────────
+# Line 1: model, repo link, git branch+indicators
 line1="${C_CYAN}[${MODEL}]${R}"
 [ -n "$repo_segment" ] && line1="${line1} ${repo_segment}"
 [ -n "$git_segment"  ] && line1="${line1} ${C_GRAY}|${R} ${git_segment}"
 [ -n "$sys_segment"  ] && line1="${line1} ${C_GRAY}|${R} ${sys_segment}"
 
-# Line 2: [████░░░░░░] 42%  $0.05  8m5s
+# Line 2: context bar, cost, duration, rate limits
 line2="${ctx_segment}  ${cost_segment}  ${elapsed_segment}"
+[ -n "$rate_segment" ] && line2="${line2}  ${C_GRAY}|${R}  ${rate_segment}"
 
 printf '%b\n' "$line1"
 printf '%b\n' "$line2"
