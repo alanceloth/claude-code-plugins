@@ -49,8 +49,11 @@ This skill triggers when the user:
    - If Portuguese detected: add `--lang pt`
    - If user says "just show me" or "don't post": add `--no-post`
    - If user wants a preview: add `--dry-run`
+   - If user wants a stricter or looser confidence cutoff: add `--min-confidence <N>` (default 75)
+   - If user wants to re-review a PR they already reviewed: add `--skip-eligibility`
+   - If the repo has no CLAUDE.md or user explicitly wants raw review: add `--skip-claude-md`
 
-4. **The command handles everything else:** Agent discovery, parallel dispatch, aggregation, and posting.
+4. **The command handles everything else:** eligibility check, CLAUDE.md awareness, agent discovery, parallel dispatch, confidence scoring, modified-line filtering, dedup against existing comments, aggregation, and posting.
 
 ## Examples
 
@@ -61,3 +64,5 @@ This skill triggers when the user:
 | "Revisar o PR 15" | `pr-review-orchestrator:pr-review 15 --lang pt` |
 | "Show me what agents would review PR 7" | `pr-review-orchestrator:pr-review 7 --dry-run` |
 | "Do a full review of my changes but don't post" | `pr-review-orchestrator:pr-review --no-post` |
+| "Stricter review on PR 42" | `pr-review-orchestrator:pr-review 42 --min-confidence 85` |
+| "Re-review PR 42 even though I already did" | `pr-review-orchestrator:pr-review 42 --skip-eligibility` |
