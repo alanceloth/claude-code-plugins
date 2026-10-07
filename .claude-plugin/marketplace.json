@@ -44,16 +44,6 @@
         "name": "Seza Akgün"
       },
       "category": "git"
-    },
-    {
-      "name": "ts-band",
-      "source": "./ts-band",
-      "description": "Nós do Tailscale acima do prompt com aviso quando um cai ou vai pra relay (vendorizado de hoobnn/hoobnn-agent-mods)",
-      "version": "0.8.0",
-      "author": {
-        "name": "hoobnn"
-      },
-      "category": "ui"
     }
   ]
 }
