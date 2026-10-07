@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": [
+      "es2023"
+    ],
+    "types": [
+      "claude-code",
+      "claude-code-tools",
+      "claude-code-mcp"
+    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "typeRoots": [
+      ".claude-plugin/types"
+    ]
+  },
+  "include": [
+    "types",
+    "hooks"
+  ]
+}

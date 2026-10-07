@@ -5,7 +5,7 @@
     "email": "alan.lanceloth@gmail.com"
   },
   "metadata": {
-    "description": "Claude Code plugins collection by alanceloth — PR Review Orchestrator and more"
+    "description": "Claude Code plugins collection by alanceloth — PR Review Orchestrator and audited mods"
   },
   "plugins": [
     {
@@ -16,8 +16,44 @@
       "author": {
         "name": "Alan Lanceloth"
       },
-      "keywords": ["code-review", "pull-request", "orchestrator", "parallel-agents", "pr-review"],
+      "keywords": [
+        "code-review",
+        "pull-request",
+        "orchestrator",
+        "parallel-agents",
+        "pr-review"
+      ],
       "category": "code-review"
+    },
+    {
+      "name": "agentpane",
+      "source": "./agentpane",
+      "description": "Pane lateral com os subagentes da sessão: ferramenta atual, tokens e conversa (vendorizado de xuanji86/claude-agentpane)",
+      "version": "1.1.4",
+      "author": {
+        "name": "Anji Xu"
+      },
+      "category": "ui"
+    },
+    {
+      "name": "cc-pr-tracker",
+      "source": "./cc-pr-tracker",
+      "description": "PRs observados acima do prompt: merge state, review e checks obrigatórios (vendorizado de sezaakgun/cc-pr-tracker, defaults mais conservadores)",
+      "version": "0.4.0",
+      "author": {
+        "name": "Seza Akgün"
+      },
+      "category": "git"
+    },
+    {
+      "name": "ts-band",
+      "source": "./ts-band",
+      "description": "Nós do Tailscale acima do prompt com aviso quando um cai ou vai pra relay (vendorizado de hoobnn/hoobnn-agent-mods)",
+      "version": "0.8.0",
+      "author": {
+        "name": "hoobnn"
+      },
+      "category": "ui"
     }
   ]
 }

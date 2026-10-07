@@ -1,0 +1,77 @@
+{
+  "name": "cc-pr-tracker",
+  "version": "0.4.0",
+  "description": "Watch GitHub PRs from a Claude Code session: merge state, review and required checks above the prompt, with alerts when they change",
+  "author": {
+    "name": "Seza Akgün"
+  },
+  "homepage": "https://github.com/sezaakgun/cc-pr-tracker",
+  "repository": "https://github.com/sezaakgun/cc-pr-tracker",
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "keywords": [
+    "github",
+    "pull-requests",
+    "ci",
+    "function-hooks",
+    "cmux"
+  ],
+  "userConfig": {
+    "muteAll": {
+      "type": "boolean",
+      "title": "Mute all PR alerts",
+      "description": "Watched PRs keep updating but never toast, flash, play a sound, post a cmux notification or tell Claude.",
+      "default": false
+    },
+    "alertOn": {
+      "type": "string",
+      "title": "Alert on",
+      "description": "Which changes alert: every change to a required check or the merge state, only checks failing and a PR becoming ready to merge, or only checks failing.",
+      "options": [
+        "every change",
+        "failures and ready to merge",
+        "failures only"
+      ],
+      "default": "every change"
+    },
+    "notifyClaude": {
+      "type": "boolean",
+      "title": "Tell Claude about changes",
+      "description": "An alert also adds a note Claude reads on its next turn, with the failing checks' log links.",
+      "default": false
+    },
+    "sound": {
+      "type": "boolean",
+      "title": "Alert sound",
+      "description": "Play a macOS system sound on an alert.",
+      "default": true
+    },
+    "pollSeconds": {
+      "type": "number",
+      "title": "Poll every (seconds)",
+      "description": "How often each watched PR is checked, one GitHub GraphQL call per PR. 30 to 3600; a value outside is held to the nearer end.",
+      "default": 60
+    },
+    "autoWatch": {
+      "type": "string",
+      "title": "Auto-watch PRs",
+      "description": "Which PRs are watched without pasting them: any open PR linked in Claude's answer and the one `gh pr create` prints, only the latter, or none.",
+      "options": [
+        "answers and gh pr create",
+        "gh pr create only",
+        "off"
+      ],
+      "default": "gh pr create only"
+    },
+    "remember": {
+      "type": "string",
+      "title": "Remember watched PRs",
+      "description": "Where the watch list is kept: with this session, so resuming it watches the same PRs and a new session starts empty, or with the project, so every new session in this directory watches them.",
+      "options": [
+        "this session",
+        "this project"
+      ],
+      "default": "this session"
+    }
+  }
+}

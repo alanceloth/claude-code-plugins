@@ -1,0 +1,6 @@
+# older generated API types (the engine now writes them to .claude-plugin/types/, which ignores itself)
+.claude/*
+!.claude/settings.json
+node_modules/
+bun.lock
+.DS_Store
